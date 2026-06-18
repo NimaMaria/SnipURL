@@ -5,8 +5,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('SnipURL server is running');
-});
+const auth = require('./routes/auth');
+app.use('/api/v1/auth', auth);
 
 module.exports = app;
