@@ -2,6 +2,7 @@ const Link = require("../models/link");
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsync = require('../middleware/catchAsyncErrors');
 const crypto = require("crypto");
+const { url } = require("inspector");
 
 exports.createShortUrl = catchAsync(async (req, res, next) => {
     const { originalUrl, customAlias } = req.body;
@@ -10,6 +11,20 @@ exports.createShortUrl = catchAsync(async (req, res, next) => {
         return next(
             new ErrorHandler("Please provide a URL", 400)
         );
+    }
+
+    const isvalidUrl = (url) => {
+        try{
+            new URL (url);
+            return true;
+        }
+        catch(err) {
+            return false;
+        }
+    }
+
+    if( !isvalidUrl(originalUrl)) {
+        return next(new ErrorHandler("Please provide valid URL", 400))
     }
 
     let shortUrl;
