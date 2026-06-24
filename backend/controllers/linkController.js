@@ -3,16 +3,34 @@ const ErrorHandler = require('../utils/errorHandler');
 const catchAsync = require('../middleware/catchAsyncErrors');
 const crypto = require("crypto");
 
-exports.createShortUrl = catchAsync(async (req,res,next) => {
-    const {originalUrl} = req.body;
+exports.createShortUrl = catchAsync(async (req, res, next) => {
+    const { originalUrl, customAlias } = req.body;
 
-    if(!originalUrl) {
+    if (!originalUrl) {
         return next(
             new ErrorHandler("Please provide a URL", 400)
         );
     }
 
-    const shortUrl = crypto.randomBytes(4).toString("hex");
+    let shortUrl;
+
+    // 1. If user gives custom alias
+    if (customAlias) {
+        // check if already exists
+        const existing = await Link.findOne({ shortUrl: customAlias });
+
+        if (existing) {
+            return next(
+                new ErrorHandler("Name already taken", 400)
+            );
+        }
+
+        shortUrl = customAlias;
+    } 
+    // 2. If no custom alias → generate random
+    else {
+        shortUrl = crypto.randomBytes(4).toString("hex");
+    }
 
     const link = await Link.create({
         originalUrl,
