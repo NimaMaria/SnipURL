@@ -1,8 +1,13 @@
 // src/components/Navbar.jsx - GRADIENT VERSION
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.jpeg";
 
-export default function Navbar() {
+export default function Navbar({ onLoginClick, user, onLogout }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const firstLetter = user?.name ? user.name.charAt(0).toUpperCase() : "U";
+
   return (
     <nav
       style={{ fontFamily: "'Cinzel', serif", letterSpacing: '1px' }}
@@ -16,7 +21,6 @@ export default function Navbar() {
 
         <div className="flex items-center gap-8 md:gap-12">
 
-          {/* HOME - hover pink-blue */}
           <Link
             to="/"
             className="text-white font-extrabold text-[16px] tracking-[1px] hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ec4899] hover:to-[#3b82f6] transition-all duration-300"
@@ -24,21 +28,50 @@ export default function Navbar() {
             HOME
           </Link>
 
-          {/* FEATURES - hover pink-blue */}
           <a
             href="#features"
-            className="text-white/60 font-bold text-[15px] tracking-[1px] hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ec4899] hover:to-[#3b82f6] transition-all duration-300"
+            className="text-white font-bold text-[15px] tracking-[1px] hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ec4899] hover:to-[#3b82f6] transition-all duration-300"
           >
             FEATURES
           </a>
 
-          {/* LOGIN - gradient button */}
-          <Link
-            to="/login"
-            className="bg-gradient-to-r from-[#ec4899] to-[#3b82f6] text-white px-8 py-2.5 rounded-full font-extrabold text-[13px] tracking-[1px] hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg shadow-pink-500/20"
-          >
-            LOGIN
-          </Link>
+          {user ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setMenuOpen((prev) => !prev)}
+                className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-2.5 py-2 pr-4 text-white hover:bg-white/10 transition"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-[#ec4899] to-[#3b82f6] text-sm font-bold">
+                  {firstLetter}
+                </div>
+                <span className="text-[13px] font-bold tracking-[1px]">{user.name || 'User'}</span>
+              </button>
+
+              {menuOpen && (
+                <div className="absolute right-0 mt-3 w-40 rounded-xl border border-white/10 bg-[#111111] p-2 shadow-lg shadow-black/40">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      onLogout?.();
+                    }}
+                    className="w-full rounded-lg px-3 py-2 text-left text-[13px] font-medium text-white/80 hover:bg-white/5 hover:text-white"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={onLoginClick}
+              className="bg-gradient-to-r from-[#ec4899] to-[#3b82f6] text-white px-8 py-2.5 rounded-full font-extrabold text-[13px] tracking-[1px] hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg shadow-pink-500/20"
+            >
+              LOGIN
+            </button>
+          )}
 
         </div>
 

@@ -17,8 +17,29 @@ body {
   overflow: hidden;
 }
 
-* {
-  font-family: 'Cinzel', serif!important;
-  letter-spacing: 0.02em;
+*, *::before, *::after {
   box-sizing: border-box;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  letter-spacing: normal;
+}
+
+h1, h2, h3, h4, h5, h6,
+.nav-title,
+.logo-text,
+.display-heading {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.02em;
+}
+
+input,
+textarea,
+select {
+  text-transform: none;
 }

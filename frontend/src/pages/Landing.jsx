@@ -1,11 +1,52 @@
 // src/pages/Landing.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
+import Auth from './Auth';
+import api from '../api/api';
 
 export default function Landing() {
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const fetchUserProfile = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setUser(null);
+      return;
+    }
+
+    try {
+      const response = await api.get('/auth/me');
+      setUser(response.data?.user || null);
+    } catch (error) {
+      localStorage.removeItem('token');
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const handleAuthSuccess = (loggedInUser) => {
+    setUser(loggedInUser || null);
+    setIsAuthOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await api.get('/auth/logout');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      localStorage.removeItem('token');
+      setUser(null);
+    }
+  };
+
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory bg-[#070D23] text-white selection:bg-[#ec4899]/30">
-      <Navbar />
+      <Navbar user={user} onLogout={handleLogout} onLoginClick={() => setIsAuthOpen(true)} />
 
       {/* HERO - FIXED DOWN */}
       <section className="snap-start min-h-[calc(100vh-72px)] relative flex flex-col bg-[#070D23] overflow-hidden">
@@ -167,6 +208,17 @@ export default function Landing() {
           <span>© 2025 SnapURL. All rights reserved.</span>
         </div>
       </footer>
+
+      {isAuthOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+          onClick={() => setIsAuthOpen(false)}
+        >
+          <div className="w-[min(90vw,760px)] rounded-[30px] border border-white/10 bg-[#050505] p-4 shadow-2xl shadow-[#3b82ff]/10" onClick={(e) => e.stopPropagation()}>
+            <Auth onClose={() => setIsAuthOpen(false)} onAuthSuccess={handleAuthSuccess} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
