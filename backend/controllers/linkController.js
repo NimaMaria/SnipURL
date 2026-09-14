@@ -53,7 +53,7 @@ exports.createShortUrl = catchAsync(async (req, res, next) => {
         userId: req.user.id
     });
 
-    res.status(200).json({
+    res.status(201).json({
         success: true,
         data: link
     });

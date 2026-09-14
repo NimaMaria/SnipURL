@@ -23,6 +23,8 @@ app.use('/api/v1/auth', auth);
 
 const linkRouter = require("./routes/linkRouter");
 app.use("/api/v1/links", linkRouter);
+const { redirectUrl } = require("./controllers/linkController");
+app.get("/:shortId", redirectUrl);
 
 // View Engine
 app.set("view engine", "pug");
