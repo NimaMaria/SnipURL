@@ -1,3 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Libre+Bodoni:wght@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow: hidden;
+}
+
+* {
+  font-family: 'Cinzel', serif!important;
+  letter-spacing: 0.02em;
+  box-sizing: border-box;
+}
