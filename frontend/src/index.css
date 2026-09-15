@@ -14,7 +14,9 @@ html {
 }
 
 body {
-  overflow: hidden;
+  background-color: #070D23;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 *, *::before, *::after {

@@ -205,7 +205,7 @@ export default function Landing() {
 
       <footer className="snap-start border-t border-white/5 py-6 min-h-[25vh] flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 flex justify-center items-center text-[11px] text-white/40">
-          <span>© 2025 SnapURL. All rights reserved.</span>
+          <span>© 2026 SnapURL. All rights reserved.</span>
         </div>
       </footer>
 

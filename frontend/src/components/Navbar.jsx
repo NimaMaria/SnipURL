@@ -1,12 +1,29 @@
 // src/components/Navbar.jsx - GRADIENT VERSION
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.jpeg";
 
 export default function Navbar({ onLoginClick, user, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isDashboard = location.pathname === "/dashboard";
 
   const firstLetter = user?.name ? user.name.charAt(0).toUpperCase() : "U";
+
+  const handleHomeClick = () => {
+    if (isDashboard) {
+      navigate("/");
+      return;
+    }
+
+    if (user) {
+      navigate("/dashboard");
+      return;
+    }
+
+    onLoginClick?.();
+  };
 
   return (
     <nav
@@ -21,12 +38,14 @@ export default function Navbar({ onLoginClick, user, onLogout }) {
 
         <div className="flex items-center gap-8 md:gap-12">
 
-          <Link
-            to="/"
+          <button
+            type="button"
+            onClick={handleHomeClick}
+            style={{ fontFamily: "inherit", letterSpacing: "inherit" }}
             className="text-white font-extrabold text-[16px] tracking-[1px] hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#ec4899] hover:to-[#3b82f6] transition-all duration-300"
           >
-            HOME
-          </Link>
+            {isDashboard ? "BACK" : "DASHBOARD"}
+          </button>
 
           <a
             href="#features"
